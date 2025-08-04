@@ -1,7 +1,5 @@
 from collections import Counter
 import pandas as pd
-from pandas.core.computation.common import result_type_many
-
 
 class Parser:
     def __init__(self ,df):
@@ -14,7 +12,7 @@ class Parser:
         result = {"antisemitic": target_counts[1],
                     "non_antisemitic":target_counts[0],
                     "total":total,
-                  "unspecified": unspecified} 
+                    "unspecified": unspecified}
         return result
 
     def calculate_average_lengths(self,total_tweets):
