@@ -1,5 +1,5 @@
 import pandas as pd
-
-df = pd.read_csv("../data/tweets_dataset.csv")
-
-print(df)
+class Loader:
+    def load_data(self,path):
+        df = pd.read_csv(path)
+        return df
