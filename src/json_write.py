@@ -3,10 +3,10 @@ import numpy as np
 
 class JsonWriter:
     @staticmethod
-    def write2json(dic):
+    def write2json(dic,path):
         try:
             dic = JsonWriter.convert_to_native(dic)
-            with open('../results/json.results', 'w', encoding='utf-8') as f:
+            with open(path, 'w', encoding='utf-8') as f:
                 json.dump(dic, f, ensure_ascii=False, indent=4)
         except Exception as e:
             raise RuntimeError("error when trying to write to json") from e
