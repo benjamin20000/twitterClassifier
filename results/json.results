@@ -2,7 +2,8 @@
     "total_tweets": {
         "antisemitic": 1250,
         "non_antisemitic": 5691,
-        "total": 6941
+        "total": 6941,
+        "unspecified": 0
     },
     "average_lengths": {
         "antisemitic": 23.3256,
