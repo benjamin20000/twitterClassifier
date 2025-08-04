@@ -1,3 +1,4 @@
+from collections import Counter
 class Parser:
     def __init__(self ,df):
         self.df = df
@@ -49,11 +50,19 @@ class Parser:
                     "non_antisemitic":non_antisemitic_tweets_arr}
         return result
 
+    def most_common_words(self):
+        common_words = Counter(" ".join(self.df["Text"]).split()).most_common(10)
+        common_words_arr = []
+        for word in common_words:
+            common_words_arr.append(word[0])
+        result = {"total":common_words_arr}
+        return result
+
     def parse(self):
         total_tweets = self.count_classes()
         average_lengths = self.calculate_average_lengths(total_tweets)
         longest_3_tweets = self.longest_tweets()
-        print(longest_3_tweets)
+        common_words = self.most_common_words()
 
 
 
