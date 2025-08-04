@@ -17,14 +17,22 @@ class Parser:
         ## count the words in non-antisemitic tweets
         non_antisemitic_words = " ".join(self.df[self.df["Biased"] == 0]['Text'].astype(str)).split(" ")
         non_antisemitic_words_count = len(non_antisemitic_words)
+
+        ## count the words in all tweets
+        all_tweets_count = non_antisemitic_words_count + antisemitic_words_count
+
         result = {"antisemitic":antisemitic_words_count/total_tweets["antisemitic"],
-                  "non_antisemitic":non_antisemitic_words_count/total_tweets["non_antisemitic"]}
+                  "non_antisemitic":non_antisemitic_words_count/total_tweets["non_antisemitic"],
+                  "total":all_tweets_count/total_tweets["total"]}
         return result
 
+    def longest_tweets(self):
+        pass
 
     def parse(self):
         total_tweets = self.count_classes()
         average_lengths = self.calculate_average_lengths(total_tweets)
+        print(average_lengths)
 
 
 
