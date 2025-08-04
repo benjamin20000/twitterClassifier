@@ -9,9 +9,12 @@ class Parser:
 
     def count_classes(self):
         target_counts = self.df.value_counts("Biased")
+        total =  target_counts[0] + target_counts[1]
+        unspecified = len(self.df) - total
         result = {"antisemitic": target_counts[1],
                     "non_antisemitic":target_counts[0],
-                    "total": target_counts[0] + target_counts[1]} ## TODO add unspecified
+                    "total":total,
+                  "unspecified": unspecified} 
         return result
 
     def calculate_average_lengths(self,total_tweets):
