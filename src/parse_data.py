@@ -87,7 +87,12 @@ class Parser:
         longest_3_tweets = self.longest_tweets()
         common_words = self.most_common_words()
         uppercase_words = self.uppercase_counter()
-        print(uppercase_words)
+        result = {"total_tweets":total_tweets,
+                  "average_lengths":average_lengths,
+                  "longest_3_tweets":longest_3_tweets,
+                  "common_words":common_words,
+                  "uppercase_words":uppercase_words}
+        return result
 
 
 
