@@ -33,22 +33,20 @@ class Parser:
                   "total":all_tweets_count/total_tweets["total"]}
         return result
 
-    def longest_tweets(self):
+    def calculate_target_longest_tweets(self, target)->list:
         ## find the 3 longest antisemitic tweets
-        antisemitic_tweets = self.df[self.df["Biased"] == 1]['Text']
-        longest_antisemitic_tweets =  antisemitic_tweets.map(lambda x:len(x)).nlargest(3)
-        antisemitic_tweets_arr = []
+        tweets = self.df[self.df["Biased"] == target]['Text']
+        longest_antisemitic_tweets = tweets.map(lambda x: len(x)).nlargest(3)
+        longest_tweets_arr = []
+
         ##insert the longest tweets text into arr
         for tweet_index in longest_antisemitic_tweets.index:
-                antisemitic_tweets_arr.append(antisemitic_tweets[tweet_index])
+            longest_tweets_arr.append(tweets[tweet_index])
+        return longest_tweets_arr
 
-        ## find the 3 longest non-antisemitic tweets
-        non_antisemitic_tweets = self.df[self.df["Biased"] == 0]['Text']
-        longest_non_antisemitic_tweets =  non_antisemitic_tweets.map(lambda x:len(x)).nlargest(3)
-        non_antisemitic_tweets_arr = []
-        ##insert the longest tweets text into arr
-        for tweet_index in longest_non_antisemitic_tweets.index:
-                non_antisemitic_tweets_arr.append(non_antisemitic_tweets[tweet_index])
+    def longest_tweets(self):
+        antisemitic_tweets_arr = self.calculate_target_longest_tweets(1)
+        non_antisemitic_tweets_arr = self.calculate_target_longest_tweets(0)
 
         ## create the result dict
         result = {"antisemitic":antisemitic_tweets_arr,
@@ -63,23 +61,25 @@ class Parser:
         result = {"total":common_words_arr}
         return result
 
-    def uppercase_counter(self):
+    def count_uppercase_by_target(self, target):
         """convert all the text in 'Text' column to a list if all the words"""
-        words_arr = " ".join(self.df[self.df["Biased"]==1]["Text"]).split()
+        words_arr = " ".join(self.df[self.df["Biased"] == target]["Text"]).split()
         """convert the word list to a pandas series"""
         words_series = pd.Series(words_arr)
         """filter the uppercase words into true and sum the trues"""
-        antisemitic_uppercase_words = words_series.str.isupper().sum()
+        uppercase_words_sum = words_series.str.isupper().sum()
+        return uppercase_words_sum
 
-        """doing the same BUT on the non-antisemitic words"""
-        non_antisemitic_words_arr = " ".join(self.df[self.df["Biased"] == 0]["Text"]).split()
-        non_antisemitic_words_series = pd.Series(non_antisemitic_words_arr)
-        non_antisemitic_uppercase_words = non_antisemitic_words_series.str.isupper().sum()
+    def uppercase_counter(self):
+        """calling count_uppercase_by_target on the 1 - antisemitic
+         and on 0 - non_antisemitic,
+        to compare tweets on their usage of UPPERCASE WORDS"""
+        antisemitic_uppercase_words = self.count_uppercase_by_target(1)
+        non_antisemitic_uppercase_words = self.count_uppercase_by_target(0)
 
         result = {"antisemitic":antisemitic_uppercase_words,
                   "non_antisemitic":non_antisemitic_uppercase_words,
                   "total":antisemitic_uppercase_words+non_antisemitic_uppercase_words}
-
         return result
 
     def parse(self):
