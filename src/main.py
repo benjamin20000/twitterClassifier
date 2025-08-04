@@ -6,8 +6,7 @@ def main():
     data_path = "../data/tweets_dataset.csv"
     df = Loader.load_data(data_path)
     parser = Parser(df)
-    parser.count_classes()
-    parser.calculate_average_lengths()
+    parser.parse()
     # print(df)
 
 
