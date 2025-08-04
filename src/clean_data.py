@@ -21,3 +21,4 @@ class Cleaner:
         lower_text = self.convert_to_lowercase(clean_text)#convert it to lowercase
         self.df['Text'] = lower_text ## set the new clean col as a df col
         self.drop_un_classified_rows()
+        return self.df
