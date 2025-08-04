@@ -21,18 +21,40 @@ class Parser:
         ## count the words in all tweets
         all_tweets_count = non_antisemitic_words_count + antisemitic_words_count
 
+        ##create the result dict
         result = {"antisemitic":antisemitic_words_count/total_tweets["antisemitic"],
                   "non_antisemitic":non_antisemitic_words_count/total_tweets["non_antisemitic"],
                   "total":all_tweets_count/total_tweets["total"]}
         return result
 
     def longest_tweets(self):
-        pass
+        ## find the 3 longest antisemitic tweets
+        antisemitic_tweets = self.df[self.df["Biased"] == 1]['Text']
+        longest_antisemitic_tweets =  antisemitic_tweets.map(lambda x:len(x)).nlargest(3)
+        antisemitic_tweets_arr = []
+        ##insert the longest tweets text into arr
+        for tweet_index in longest_antisemitic_tweets.index:
+                antisemitic_tweets_arr.append(antisemitic_tweets[tweet_index])
+
+        ## find the 3 longest non-antisemitic tweets
+        non_antisemitic_tweets = self.df[self.df["Biased"] == 0]['Text']
+        longest_non_antisemitic_tweets =  non_antisemitic_tweets.map(lambda x:len(x)).nlargest(3)
+        non_antisemitic_tweets_arr = []
+        ##insert the longest tweets text into arr
+        for tweet_index in longest_non_antisemitic_tweets.index:
+                non_antisemitic_tweets_arr.append(non_antisemitic_tweets[tweet_index])
+
+        ## create the result dict
+        result = {"antisemitic":antisemitic_tweets_arr,
+                    "non_antisemitic":non_antisemitic_tweets_arr}
+        return result
 
     def parse(self):
         total_tweets = self.count_classes()
         average_lengths = self.calculate_average_lengths(total_tweets)
-        print(average_lengths)
+        longest_3_tweets = self.longest_tweets()
+        print(longest_3_tweets)
+
 
 
 
