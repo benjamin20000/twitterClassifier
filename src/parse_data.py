@@ -1,4 +1,8 @@
 from collections import Counter
+import pandas as pd
+from pandas.core.computation.common import result_type_many
+
+
 class Parser:
     def __init__(self ,df):
         self.df = df
@@ -58,11 +62,32 @@ class Parser:
         result = {"total":common_words_arr}
         return result
 
+    def uppercase_counter(self):
+        """convert all the text in 'Text' column to a list if all the words"""
+        words_arr = " ".join(self.df[self.df["Biased"]==1]["Text"]).split()
+        """convert the word list to a pandas series"""
+        words_series = pd.Series(words_arr)
+        """filter the uppercase words into true and sum the trues"""
+        antisemitic_uppercase_words = words_series.str.isupper().sum()
+
+        """doing the same BUT on the non-antisemitic words"""
+        non_antisemitic_words_arr = " ".join(self.df[self.df["Biased"] == 0]["Text"]).split()
+        non_antisemitic_words_series = pd.Series(non_antisemitic_words_arr)
+        non_antisemitic_uppercase_words = non_antisemitic_words_series.str.isupper().sum()
+
+        result = {"antisemitic":antisemitic_uppercase_words,
+                  "non_antisemitic":non_antisemitic_uppercase_words,
+                  "total":antisemitic_uppercase_words+non_antisemitic_uppercase_words}
+
+        return result
+
     def parse(self):
         total_tweets = self.count_classes()
         average_lengths = self.calculate_average_lengths(total_tweets)
         longest_3_tweets = self.longest_tweets()
         common_words = self.most_common_words()
+        uppercase_words = self.uppercase_counter()
+        print(uppercase_words)
 
 
 
